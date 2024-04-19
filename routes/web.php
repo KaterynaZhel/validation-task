@@ -15,4 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+
 });
+Route::resource('games', App\Http\Controllers\ImportController::class)->except(['show', 'update', 'edit', 'destroy']);
+Route::post('/validation', [App\Http\Controllers\ImportController::class, 'validation'])->name('games.validation');
+
+
+
+
