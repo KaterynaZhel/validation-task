@@ -20,7 +20,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY . /var/www/html
 
 # Встановлюємо залежності Composer
-RUN cd /var/www/html && composer install
+RUN cd /var/www/html && composer install \
+    cp .env.example .env \
+    php artisan key:generate \
+    php artisan migrate
 
 # Задаємо власника та групу для додатку
 RUN chown -R www-data:www-data /var/www/html
