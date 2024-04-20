@@ -16,23 +16,17 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 # RUN apt-get install -y nodejs
 
+# Встановлення MySQL
+RUN apt-get install -y default-mysql-client
+
 # Копіюємо файли додатку в контейнер
 COPY . /var/www/html
-
-# Встановлюємо залежності Composer
-RUN cd /var/www/html && composer install \
-    cp .env.example .env \
-    php artisan key:generate \
-    php artisan migrate
-
-# Задаємо власника та групу для додатку
-RUN chown -R www-data:www-data /var/www/html
 
 # Вказуємо робочий каталог
 WORKDIR /var/www/html
 
-# Відкриваємо порт, якщо потрібно
-# EXPOSE 8000
+# Відкриваємо порт
+EXPOSE 8000
 
 # Запускаємо команду для запуску сервера PHP (може бути змінена в залежності від вашого проекту)
-CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+CMD bash -c "composer install --no-dev && cp .env.example .env && php artisan key:generate && php artisan serve --host=0.0.0.0"
